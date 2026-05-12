@@ -27,6 +27,7 @@ Usage:
 from __future__ import annotations
 
 import os
+from datetime import date
 from pathlib import Path
 
 from langchain.chat_models import init_chat_model
@@ -107,13 +108,19 @@ def build_agent():
     Uses `LocalShellBackend` so the agent sees the real filesystem (not the
     default in-memory virtual fs). Without this, `ls`/`read_file`/`glob`/`grep`
     return empty results — exactly what we hit on the first smoke run.
+
+    `virtual_mode=False` is explicit (the 0.6.0 default flips to True). We
+    *want* absolute-path access here because the user passes a target path
+    like `/path/to/repo` and the agent needs to read it directly. The
+    security trade-off is accepted: this agent is opt-in, read-mostly, and
+    only used in trusted local audits.
     """
     return create_deep_agent(
         model=_build_model(),
-        system_prompt=ORCHESTRATOR_PROMPT,
+        system_prompt=ORCHESTRATOR_PROMPT.format(date=date.today().isoformat()),
         tools=[osv_query, secret_pattern_scan, cvss_severity],
         subagents=[SECRET_HUNTER, DEP_AUDITOR, SAST_ANALYZER],
-        backend=LocalShellBackend(),
+        backend=LocalShellBackend(virtual_mode=False),
     )
 
 
