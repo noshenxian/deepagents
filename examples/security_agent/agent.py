@@ -29,6 +29,7 @@ from __future__ import annotations
 import os
 from datetime import date
 from pathlib import Path
+from typing import Any
 
 from langchain.chat_models import init_chat_model
 from langchain_anthropic import ChatAnthropic
@@ -38,10 +39,42 @@ from deepagents.backends.local_shell import LocalShellBackend
 from prompts import (
     DEP_AUDITOR_PROMPT,
     ORCHESTRATOR_PROMPT,
+    POC_INTEL_PROMPT,
     SAST_ANALYZER_PROMPT,
     SECRET_HUNTER_PROMPT,
 )
-from tools import cvss_severity, osv_query, secret_pattern_scan
+from tools import (
+    cvss_severity,
+    dependency_manifest_scan,
+    osv_query,
+    poc_source_lookup,
+    secret_path_scan,
+    secret_pattern_scan,
+    static_pattern_scan,
+    write_poc_intel_artifact,
+)
+
+
+DEFAULT_REPORT_PATH = "./SECURITY_REPORT.md"
+"""Default path for the generated report."""
+
+DEFAULT_INTERRUPT_ON = {
+    "execute": True,
+    "write_file": True,
+    "edit_file": True,
+}
+"""Dangerous tools that require human review by default."""
+
+
+def _scanner_env() -> dict[str, str]:
+    """Return a minimal environment that can still find common scanner installs."""
+    paths = [
+        str(Path.home() / ".local" / "bin"),
+        "/usr/local/bin",
+        "/usr/bin",
+        "/bin",
+    ]
+    return {"PATH": os.pathsep.join(paths)}
 
 
 def _build_model():
@@ -78,7 +111,7 @@ SECRET_HUNTER = {
         "Returns a list of (pattern, file:line, redacted match)."
     ),
     "system_prompt": SECRET_HUNTER_PROMPT,
-    "tools": [secret_pattern_scan],
+    "tools": [secret_path_scan, secret_pattern_scan],
 }
 
 DEP_AUDITOR = {
@@ -88,7 +121,7 @@ DEP_AUDITOR = {
         "Returns a markdown table of (package, version, CVE, severity, fixed-in)."
     ),
     "system_prompt": DEP_AUDITOR_PROMPT,
-    "tools": [osv_query],
+    "tools": [dependency_manifest_scan, osv_query],
 }
 
 SAST_ANALYZER = {
@@ -98,11 +131,25 @@ SAST_ANALYZER = {
         "Give it a target path. Returns a list of high-confidence code findings."
     ),
     "system_prompt": SAST_ANALYZER_PROMPT,
-    "tools": [],  # uses execute (built-in) for the scanners; no custom tools needed
+    "tools": [static_pattern_scan],
+}
+
+POC_INTEL = {
+    "name": "poc-intel",
+    "description": (
+        "Collects public POC intelligence for CVE/GHSA-backed findings and "
+        "writes safe documentation artifacts. Does not execute external POC code."
+    ),
+    "system_prompt": POC_INTEL_PROMPT,
+    "tools": [poc_source_lookup, write_poc_intel_artifact],
 }
 
 
-def build_agent():
+def build_agent(
+    *,
+    report_path: str | None = None,
+    interrupt_on: dict[str, bool | dict[str, Any]] | None = None,
+):
     """Construct the security-analysis deep agent.
 
     Uses `LocalShellBackend` so the agent sees the real filesystem (not the
@@ -115,17 +162,42 @@ def build_agent():
     security trade-off is accepted: this agent is opt-in, read-mostly, and
     only used in trusted local audits.
     """
+    resolved_report_path = report_path or os.environ.get(
+        "SECURITY_AGENT_REPORT_PATH", DEFAULT_REPORT_PATH
+    )
+    resolved_interrupt_on = (
+        DEFAULT_INTERRUPT_ON if interrupt_on is None else interrupt_on
+    )
+
     return create_deep_agent(
         model=_build_model(),
-        system_prompt=ORCHESTRATOR_PROMPT.format(date=date.today().isoformat()),
-        tools=[osv_query, secret_pattern_scan, cvss_severity],
-        subagents=[SECRET_HUNTER, DEP_AUDITOR, SAST_ANALYZER],
-        backend=LocalShellBackend(virtual_mode=False),
+        system_prompt=ORCHESTRATOR_PROMPT.format(
+            date=date.today().isoformat(),
+            report_path=resolved_report_path,
+        ),
+        tools=[
+            dependency_manifest_scan,
+            osv_query,
+            poc_source_lookup,
+            secret_path_scan,
+            secret_pattern_scan,
+            static_pattern_scan,
+            write_poc_intel_artifact,
+            cvss_severity,
+        ],
+        subagents=[SECRET_HUNTER, DEP_AUDITOR, SAST_ANALYZER, POC_INTEL],
+        backend=LocalShellBackend(
+            virtual_mode=False,
+            env=_scanner_env(),
+            inherit_env=False,
+        ),
+        interrupt_on=resolved_interrupt_on,
     )
 
 
-# Module-level instance for `langgraph dev` / Studio.
-agent = build_agent()
+def get_agent():
+    """Build an agent instance for LangGraph Studio or programmatic use."""
+    return build_agent()
 
 
 if __name__ == "__main__":
@@ -140,7 +212,8 @@ if __name__ == "__main__":
         print(f"Path does not exist: {target}")
         sys.exit(1)
 
-    report_path = os.environ.get("SECURITY_AGENT_REPORT_PATH", "./SECURITY_REPORT.md")
+    report_path = os.environ.get("SECURITY_AGENT_REPORT_PATH", DEFAULT_REPORT_PATH)
+    agent = build_agent(report_path=report_path)
     prompt = (
         f"Audit the codebase at {target}. Follow the workflow strictly. "
         f"Write the final report to {report_path}."

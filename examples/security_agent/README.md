@@ -13,13 +13,21 @@ sub-agents with isolated context, and a workflow-driven system prompt.
     │
     ├─> [secret-hunter]   - grep patterns + secret_pattern_scan
     ├─> [dep-auditor]     - manifest parsing + osv_query (OSV.dev API)
-    └─> [sast-analyzer]   - shell out to semgrep / bandit / gosec
+    ├─> [sast-analyzer]   - shell out to semgrep / bandit / gosec
+    └─> [poc-intel]       - public POC references + safe artifacts
 ```
 
 The orchestrator plans with `write_todos`, dispatches sub-agents in parallel via
-`task`, and writes the final report to `SECURITY_REPORT.md`. Each sub-agent has
+`task`, and writes the final report to `SECURITY_REPORT.md`. Secret, dependency,
+and fallback static scans run through deterministic Python tools that return
+structured records before the LLM triages and summarizes them. Each sub-agent has
 its own context window so noisy tool output (JSON from semgrep, file lists from
 glob) doesn't pollute the orchestrator's reasoning.
+
+For CVE/GHSA-backed findings, the `poc-intel` sub-agent can collect public POC
+references from advisory sources and write documentation-only artifacts under
+`security_artifacts/pocs/`. It does not clone, download, or execute external
+exploit code.
 
 ## Setup
 
@@ -36,8 +44,8 @@ pipx install semgrep bandit
 go install github.com/securego/gosec/v2/cmd/gosec@latest
 ```
 
-The agent works without scanners installed — it falls back to grep patterns —
-but findings are weaker.
+The agent works without scanners installed — it falls back to deterministic
+static pattern scanning — but findings are weaker.
 
 ## Running
 
@@ -54,12 +62,12 @@ SECURITY_AGENT_MODEL="openai:gpt-4o"               uv run python agent.py /path/
 
 ### LangGraph Studio / dev server
 
-The module exports a top-level `agent` instance, so `langgraph dev` works after
+The module exports a `get_agent` factory, so `langgraph dev` works after
 adding a `langgraph.json`:
 
 ```json
 {
-  "graphs": { "security_agent": "./agent.py:agent" },
+  "graphs": { "security_agent": "./agent.py:get_agent" },
   "python_version": "3.11"
 }
 ```
