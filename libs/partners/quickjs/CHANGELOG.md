@@ -1,5 +1,44 @@
 # Changelog
 
+## [0.2.0](https://github.com/noshenxian/deepagents/compare/langchain-quickjs==0.1.2...langchain-quickjs==0.2.0) (2026-05-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **sdk:** v0.6 ([#3193](https://github.com/noshenxian/deepagents/issues/3193))
+* **quickjs:** use quickjs-rs ([#2979](https://github.com/noshenxian/deepagents/issues/2979))
+* **quickjs:** use quickjs-rs ([#2977](https://github.com/noshenxian/deepagents/issues/2977))
+
+### Features
+
+* **quickjs:** add `max_ptc_calls` budget for ptc calls ([#2994](https://github.com/noshenxian/deepagents/issues/2994)) ([13f6c2d](https://github.com/noshenxian/deepagents/commit/13f6c2dec448e270d7e685447292d394d31fe528))
+* **quickjs:** add snapshot-based repl persistence between turns ([#3064](https://github.com/noshenxian/deepagents/issues/3064)) ([c46feed](https://github.com/noshenxian/deepagents/commit/c46feed66e83876054489a8454904de4c87ddf6b))
+* **quickjs:** propagate return types ([#3210](https://github.com/noshenxian/deepagents/issues/3210)) ([e26bccb](https://github.com/noshenxian/deepagents/commit/e26bccbe81b4e3ff2f0332f56f683106e0bafd88))
+* **quickjs:** rename middleware ([#3334](https://github.com/noshenxian/deepagents/issues/3334)) ([fc80075](https://github.com/noshenxian/deepagents/commit/fc80075c65c3b4beb8f672b6bb27464fee6d79c2))
+* **quickjs:** surface tool exceptions as the original error ([#3049](https://github.com/noshenxian/deepagents/issues/3049)) ([d96dc8c](https://github.com/noshenxian/deepagents/commit/d96dc8ce4a1d2d25abc606266cfe14629789c457))
+* **quickjs:** use quickjs-rs ([#2977](https://github.com/noshenxian/deepagents/issues/2977)) ([34f30ad](https://github.com/noshenxian/deepagents/commit/34f30ad7053c17a71a1b387780f4838c52aca63a))
+* **quickjs:** use quickjs-rs ([#2979](https://github.com/noshenxian/deepagents/issues/2979)) ([7491899](https://github.com/noshenxian/deepagents/commit/7491899074fa1ed7946f2f5a0e84c2b3793d39bd))
+* **sdk:** add optional module field to skill frontmatter ([#2976](https://github.com/noshenxian/deepagents/issues/2976)) ([2a9cd44](https://github.com/noshenxian/deepagents/commit/2a9cd44f61c6c15bf74c63dff0f3478cdee18d11))
+* **sdk:** v0.6 ([#3193](https://github.com/noshenxian/deepagents/issues/3193)) ([4db09ac](https://github.com/noshenxian/deepagents/commit/4db09acba34b38521192b8f278723524be560779))
+
+
+### Bug Fixes
+
+* **deepagents:** remove old integration tests ([#2728](https://github.com/noshenxian/deepagents/issues/2728)) ([6653197](https://github.com/noshenxian/deepagents/commit/6653197b6cbec6dd1ca23d9f90bc1439ca26e6e5))
+* **quickjs:** add `ls_code_input_language` metadata to `eval` tool ([#3062](https://github.com/noshenxian/deepagents/issues/3062)) ([b9bc674](https://github.com/noshenxian/deepagents/commit/b9bc674fe67ac40e000b30bbb4a753a9b6e167ed))
+* **quickjs:** bound console buffering at capture time ([#2999](https://github.com/noshenxian/deepagents/issues/2999)) ([251e405](https://github.com/noshenxian/deepagents/commit/251e405d8b1897ae09ee47b0a8be48edfaaad8a1))
+* **quickjs:** handle top-level await in snapshot step ([#3161](https://github.com/noshenxian/deepagents/issues/3161)) ([b330c22](https://github.com/noshenxian/deepagents/commit/b330c222ee661f7944a59d7b0ef2e0c7a42b1e29))
+* **quickjs:** keep PTC loop and runtime context in `_PTCState` ([#3134](https://github.com/noshenxian/deepagents/issues/3134)) ([c70cc5a](https://github.com/noshenxian/deepagents/commit/c70cc5a602bd26191f347dd31cc4e5d17c75f65f))
+* **quickjs:** per-thread_id Runtimes ([#2931](https://github.com/noshenxian/deepagents/issues/2931)) ([4021b03](https://github.com/noshenxian/deepagents/commit/4021b032f79913ddbfbb233fce5aff3f245fd1db))
+* **quickjs:** prompt improvements ([#2564](https://github.com/noshenxian/deepagents/issues/2564)) ([4999c6b](https://github.com/noshenxian/deepagents/commit/4999c6b064266a0f0189964241323fd0f0ba345e))
+* **quickjs:** remove ptc command buffering ([#3023](https://github.com/noshenxian/deepagents/issues/3023)) ([ac1218a](https://github.com/noshenxian/deepagents/commit/ac1218a1b14cde2f066c59804ab86567821f8c9d))
+* **quickjs:** run quickjs tests in CI and restore host exception propagation ([#3162](https://github.com/noshenxian/deepagents/issues/3162)) ([78cb42c](https://github.com/noshenxian/deepagents/commit/78cb42c1f57f83b90c4e2d91002967b1bfc047e6))
+
+
+### Reverted Changes
+
+* **quickjs:** release: 0.1.1 ([#3255](https://github.com/noshenxian/deepagents/issues/3255)) ([8125f71](https://github.com/noshenxian/deepagents/commit/8125f71a6ffd40b75a25c017e2b255eeb3be48a6))
+
 ## [0.1.2](https://github.com/langchain-ai/deepagents/compare/langchain-quickjs==0.1.1...langchain-quickjs==0.1.2) (2026-05-11)
 
 
