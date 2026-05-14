@@ -1,5 +1,60 @@
 # Changelog
 
+## [0.7.0](https://github.com/noshenxian/deepagents/compare/deepagents==0.6.1...deepagents==0.7.0) (2026-05-14)
+
+
+### ⚠ BREAKING CHANGES
+
+* **sdk:** v0.6 ([#3193](https://github.com/noshenxian/deepagents/issues/3193))
+* **quickjs:** use quickjs-rs ([#2977](https://github.com/noshenxian/deepagents/issues/2977))
+
+### Features
+
+* **harbor,sdk:** migrate LangSmith env from templates to snapshots ([#2888](https://github.com/noshenxian/deepagents/issues/2888)) ([082b900](https://github.com/noshenxian/deepagents/commit/082b9008d14882be83a437d0c1155005e2f1e722))
+* **quickjs:** rename middleware ([#3334](https://github.com/noshenxian/deepagents/issues/3334)) ([fc80075](https://github.com/noshenxian/deepagents/commit/fc80075c65c3b4beb8f672b6bb27464fee6d79c2))
+* **quickjs:** use quickjs-rs ([#2977](https://github.com/noshenxian/deepagents/issues/2977)) ([34f30ad](https://github.com/noshenxian/deepagents/commit/34f30ad7053c17a71a1b387780f4838c52aca63a))
+* **sdk:** `ls_agent_type` configurable tag on subagent runs ([#2788](https://github.com/noshenxian/deepagents/issues/2788)) ([3bcc51a](https://github.com/noshenxian/deepagents/commit/3bcc51a95da80094cfc8bc4bcaf25dc1e2ad8f44))
+* **sdk:** add `ContextHubBackend` backend type ([#3338](https://github.com/noshenxian/deepagents/issues/3338)) ([6962826](https://github.com/noshenxian/deepagents/commit/69628263cb2c1f6951b1b37bbc0edbb85983ad51))
+* **sdk:** add GPT-5.5 harness profile ([#3082](https://github.com/noshenxian/deepagents/issues/3082)) ([73bc9cc](https://github.com/noshenxian/deepagents/commit/73bc9ccc0f66ad72ce90c5efcc5a4fbf2331db37))
+* **sdk:** add optional module field to skill frontmatter ([#2976](https://github.com/noshenxian/deepagents/issues/2976)) ([2a9cd44](https://github.com/noshenxian/deepagents/commit/2a9cd44f61c6c15bf74c63dff0f3478cdee18d11))
+* **sdk:** add permissions system for filesystem access control ([#2633](https://github.com/noshenxian/deepagents/issues/2633)) ([41dc759](https://github.com/noshenxian/deepagents/commit/41dc7597deb3fc036f1f850e68edc3c0870f27da))
+* **sdk:** add static structured output to subagent response ([#2437](https://github.com/noshenxian/deepagents/issues/2437)) ([6e57731](https://github.com/noshenxian/deepagents/commit/6e57731fc6d908ac1ebe131e782696a4776147e9))
+* **sdk:** deprecate `model=None` in `create_deep_agent` ([#2677](https://github.com/noshenxian/deepagents/issues/2677)) ([149df41](https://github.com/noshenxian/deepagents/commit/149df415d17f3cf3b7eb0bd1e78460112bfa9b04))
+* **sdk:** namespace improvements for deepagents ([#2386](https://github.com/noshenxian/deepagents/issues/2386)) ([66c57e1](https://github.com/noshenxian/deepagents/commit/66c57e1e33e21d5ed0b7ceaa615b0e1c27ac556b))
+* **sdk:** scope permissions to routes for composite backends with sandbox default ([#2659](https://github.com/noshenxian/deepagents/issues/2659)) ([6dd6122](https://github.com/noshenxian/deepagents/commit/6dd612237a7ee707726c4cafc4b691704e4cdb37))
+* **sdk:** v0.6 ([#3193](https://github.com/noshenxian/deepagents/issues/3193)) ([4db09ac](https://github.com/noshenxian/deepagents/commit/4db09acba34b38521192b8f278723524be560779))
+
+
+### Bug Fixes
+
+* **cli:** prevent stdin hang by passing `DEVNULL` ([#2427](https://github.com/noshenxian/deepagents/issues/2427)) ([5bf5fae](https://github.com/noshenxian/deepagents/commit/5bf5fae8d93beba90628f2f71e3e79817a36ac9e))
+* **deepagents:** remove old integration tests ([#2728](https://github.com/noshenxian/deepagents/issues/2728)) ([6653197](https://github.com/noshenxian/deepagents/commit/6653197b6cbec6dd1ca23d9f90bc1439ca26e6e5))
+* **sdk:** add write preflight and native read to langsmith sandbox ([#2695](https://github.com/noshenxian/deepagents/issues/2695)) ([741221c](https://github.com/noshenxian/deepagents/commit/741221c9d8b65a535816e318ee24d3c19a4bde80))
+* **sdk:** auto-added GP subagent inherits parent permissions ([#3131](https://github.com/noshenxian/deepagents/issues/3131)) ([0d55b3b](https://github.com/noshenxian/deepagents/commit/0d55b3ba8b974d06b1e0f52893f33e44496bff8b))
+* **sdk:** avoid deprecated-use warnings in `CompositeBackend` path mutation ([#3244](https://github.com/noshenxian/deepagents/issues/3244)) ([64d45f6](https://github.com/noshenxian/deepagents/commit/64d45f67c86edb4df2ced0e7b82f1a8fd158ec8c))
+* **sdk:** catch PermissionError in FilesystemBackend ripgrep ([#2571](https://github.com/noshenxian/deepagents/issues/2571)) ([3d5d673](https://github.com/noshenxian/deepagents/commit/3d5d67349c8e88e33af98137db9634742f018cb0))
+* **sdk:** default OpenRouter routing to ignore Azure upstream ([#3157](https://github.com/noshenxian/deepagents/issues/3157)) ([01a9113](https://github.com/noshenxian/deepagents/commit/01a911379d368fab8280cd827c38776800abe7b8))
+* **sdk:** harden `FilesystemBackend` against symlink loops ([#3035](https://github.com/noshenxian/deepagents/issues/3035)) ([abd02f9](https://github.com/noshenxian/deepagents/commit/abd02f99ef12030bdfe429fdc3ad80a2785bea61))
+* **sdk:** implement upload_files for StateBackend ([#2661](https://github.com/noshenxian/deepagents/issues/2661)) ([5798345](https://github.com/noshenxian/deepagents/commit/579834513a4ba1a024a52fc4edf918f526eab5f2))
+* **sdk:** import profile re-exports from leaf modules ([#3377](https://github.com/noshenxian/deepagents/issues/3377)) ([ca99391](https://github.com/noshenxian/deepagents/commit/ca99391668ea1510932f8e9097e8ed3c0caadf73))
+* **sdk:** import profile symbols directly from `harness_profiles` ([#3291](https://github.com/noshenxian/deepagents/issues/3291)) ([503453c](https://github.com/noshenxian/deepagents/commit/503453c06f7e0545914789a07ddba6ca6b0c8ec5))
+* **sdk:** normalize Windows backslash paths before PurePosixPath processing ([#1859](https://github.com/noshenxian/deepagents/issues/1859)) ([e1c1d50](https://github.com/noshenxian/deepagents/commit/e1c1d5024729f5205eaa42bf6a9bc1c93a30d043))
+* **sdk:** preserve CRLF line endings in sandbox edit ([#2899](https://github.com/noshenxian/deepagents/issues/2899)) ([291aebe](https://github.com/noshenxian/deepagents/commit/291aebe21f8a53604a2bf47daa120761dace2536))
+* **sdk:** propagate `CompiledSubAgent` name into `lc_agent_name` metadata ([#3045](https://github.com/noshenxian/deepagents/issues/3045)) ([f671e6b](https://github.com/noshenxian/deepagents/commit/f671e6b18aa49700a535f7b48441662b67dafef9))
+* **sdk:** raise `ValueError` for permission paths without leading slash and path traversal ([#2665](https://github.com/noshenxian/deepagents/issues/2665)) ([723d27d](https://github.com/noshenxian/deepagents/commit/723d27dcdce03cc9ffaa757c70533f0134a43a44))
+* **sdk:** re-export filesystem permission for backwards compatibility ([#3036](https://github.com/noshenxian/deepagents/issues/3036)) ([e04b50a](https://github.com/noshenxian/deepagents/commit/e04b50ae291abefa64ee2750a0c1bbfd93954b32))
+* **sdk:** skill loading should default to 1000 lines ([#2721](https://github.com/noshenxian/deepagents/issues/2721)) ([badc4d3](https://github.com/noshenxian/deepagents/commit/badc4d3921ae0ede4305f44f85fa7266df9465e7))
+* **sdk:** support read-your-writes in StateBackend ([#2991](https://github.com/noshenxian/deepagents/issues/2991)) ([0924869](https://github.com/noshenxian/deepagents/commit/0924869bc3d946577e7c3cbc79a86e4aaf522edd))
+* **sdk:** surface EOF-newline mismatch in `edit_file` ([#3031](https://github.com/noshenxian/deepagents/issues/3031)) ([d30686e](https://github.com/noshenxian/deepagents/commit/d30686ec82d36a0e9430f7c512c34835aba2c079))
+* **sdk:** surface OS errors in sandbox ls/read/edit/glob ([#3359](https://github.com/noshenxian/deepagents/issues/3359)) ([7598bd9](https://github.com/noshenxian/deepagents/commit/7598bd93f72b609a46da64f7c458c42ac07a0f3a))
+* **sdk:** treat boundary-truncated UTF-8 in `read()` prefix check as text ([#2980](https://github.com/noshenxian/deepagents/issues/2980)) ([c36ebc7](https://github.com/noshenxian/deepagents/commit/c36ebc7be5840e9008279992741c67a8377ffc01))
+* **sdk:** Use configurable directly instead of tracing context for subagent tagging ([#2845](https://github.com/noshenxian/deepagents/issues/2845)) ([bd6ec6b](https://github.com/noshenxian/deepagents/commit/bd6ec6bcebcdcc26f6b79e2c55611074b0e01631))
+
+
+### Performance Improvements
+
+* **sdk:** add cache breakpoint to `MemoryMiddleware` ([#2713](https://github.com/noshenxian/deepagents/issues/2713)) ([1699f3a](https://github.com/noshenxian/deepagents/commit/1699f3aea710985087b16318bb8e6f6e80e02a1b))
+
 ## [0.6.1](https://github.com/langchain-ai/deepagents/compare/deepagents==0.6.0...deepagents==0.6.1) (2026-05-12)
 
 
